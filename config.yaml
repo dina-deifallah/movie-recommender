@@ -1,0 +1,26 @@
+paths:
+  raw_ratings: data/raw/ratings.csv
+  raw_books: data/raw/books.csv
+  processed_matrix: data/processed/user_item_matrix.parquet
+  model_file: artifacts/item_similarity.joblib
+  metrics_file: artifacts/metrics.json
+
+simulation:
+  n_users: 800
+  n_books: 200
+  n_genres: 6
+  ratings_per_user_min: 10
+  ratings_per_user_max: 40
+  random_seed: 42
+
+preprocess:
+  min_ratings_per_book: 5
+  min_ratings_per_user: 5
+
+model:
+  min_common_users: 3
+  top_k: 5
+
+evaluation:
+  test_fraction: 0.2
+  k: 5
