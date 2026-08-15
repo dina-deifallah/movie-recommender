@@ -1,20 +1,17 @@
 paths:
-  raw_ratings: data/raw/ratings.csv
-  raw_books: data/raw/books.csv
   processed_matrix: data/processed/user_item_matrix.parquet
   model_file: artifacts/item_similarity.joblib
   metrics_file: artifacts/metrics.json
 
-simulation:
-  n_users: 800
-  n_books: 200
-  n_genres: 6
-  ratings_per_user_min: 10
-  ratings_per_user_max: 40
-  random_seed: 42
+download:
+  url: https://files.grouplens.org/datasets/movielens/ml-latest-small.zip
+  dir: data/raw
+  ratings_file: ratings.csv
+  movies_file: movies.csv
 
 preprocess:
-  min_ratings_per_book: 5
+  min_rating: 0.5
+  min_ratings_per_movie: 10
   min_ratings_per_user: 5
 
 model:
@@ -24,3 +21,4 @@ model:
 evaluation:
   test_fraction: 0.2
   k: 5
+  like_threshold: 4.0
