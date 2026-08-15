@@ -49,6 +49,14 @@ def _find_file(download_dir, filename):
     matches = list(Path(download_dir).rglob(filename))
     return matches[0] if matches else None
 
+def _add_new_ratings(config, ratings):
+    """Fold in any new ratings we've collected since the original download."""
+    new_path = Path(config["paths"]["new_ratings"])
+    if new_path.exists():
+        new = pd.read_csv(new_path)
+        ratings = pd.concat([ratings, new], ignore_index=True)
+        logger.info("Added %d new ratings from %s.", len(new), new_path)
+    return ratings
 
 def load_raw_data(config):
     """Load movies and ratings, downloading them first if needed."""
@@ -66,6 +74,7 @@ def load_raw_data(config):
     movies = pd.read_csv(movies_path)
     ratings = pd.read_csv(ratings_path)
 
+    
     # Print the real column names so we can confirm the mapping.
     logger.info("Raw movie columns: %s", list(movies.columns))
     logger.info("Raw rating columns: %s", list(ratings.columns))
@@ -82,6 +91,8 @@ def load_raw_data(config):
         "movieId": "movie_id",
         "rating": "rating",
     })[["user_id", "movie_id", "rating"]]
+    
+    ratings = _add_new_ratings(config, ratings)
 
     logger.info("Loaded %d ratings and %d movies.", len(ratings), len(movies))
     return movies, ratings
